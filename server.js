@@ -16,11 +16,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // API Router
 const apiRoutes = require("./routes/apiRoutes");
-app.use(apiRoutes);
+app.use("/api", apiRoutes);
 
 // HTML Router
 const htmlRoutes = require("./routes/htmlRoutes");
-app.use(htmlRoutes);
+app.use("/", htmlRoutes);
 
 // Opening port for listening
 app.listen(PORT, () => {
