@@ -2,6 +2,8 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+// UUID to create unique ID
+const { v4: uuidv4 } = require("uuid");
 
 // Setting port
 const PORT = process.env.PORT || 3001;
@@ -34,11 +36,25 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
+  req.body.id = uuidv4();
   notes.push(req.body);
-  fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
-    if (err) throw err;
-  });
+  fs.writeFileSync("./db/db.json", JSON.stringify(notes));
   res.json(notes);
+});
+
+app.delete("/api/notes/:id", (req, res) => {
+  const noteID = req.params.id;
+
+  for (let i = 0; i < notes.length; i++) {
+    if (notes[i].id === noteID) {
+      notes.splice(i, 1);
+    }
+  }
+
+  fs.writeFileSync("./db/db.json", JSON.stringify(notes));
+
+  deletedNotes = notes;
+  res.json(deletedNotes);
 });
 
 app.listen(PORT, () => {
