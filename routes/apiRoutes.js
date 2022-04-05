@@ -11,10 +11,15 @@ router.get("/notes", (req, res) => {
 
 // POST request for notes
 router.post("/notes", (req, res) => {
+  // Setting new note as the request.body
   const newNote = req.body;
+  // Setting new note ID to unique ID
   newNote.id = uuidv4();
+  // Pushing new note to notes array
   notesData.push(newNote);
+  // Writing new note to database, and formatting it
   fs.writeFileSync("./db/db.json", JSON.stringify(notesData, null, 2));
+  // Giving browser the json response
   res.json(notesData);
 });
 
